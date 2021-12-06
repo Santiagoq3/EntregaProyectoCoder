@@ -1,9 +1,10 @@
 const fs = require("fs")
 
 class Carrito{
-    constructor(nombreArchivo,estadoInicial = []){
+
+    constructor(nombreArchivo){
         this.nombreArchivo = nombreArchivo
-        this.carritos = estadoInicial
+        this.carritos = JSON.parse(fs.readFileSync(this.nombreArchivo, "utf-8"))
 
         this.id;
         this.timestamp;
@@ -13,18 +14,15 @@ class Carrito{
 
     async crearCarrito(carrito = {}) {
 
-        const carritos = await fs.promises.readFile(this.nombreArchivo, "utf-8");
-
-        this.carritos = JSON.parse(carritos);
-
         carrito.id = this.carritos.length + 1
         this.carritos.push(carrito)
         try {
 
             await  fs.promises.writeFile(this.nombreArchivo, JSON.stringify(this.carritos))
+            return carrito.id
 
         } catch (error) {
-         console.log("no se pudo guardar", error)
+            console.log("no se pudo guardar", error)
         }
     }
 
@@ -44,6 +42,14 @@ class Carrito{
         }
     }
 
+    async obtenerProductosDeCarrito(id){
+        //obtenemos el carrito
+        const [carrito] = await this.obtenerCarrito(id);
+
+        // retornamos los productos del carrito
+        return carrito.productos
+    }
+
     async  deleteCarritoById(id){
 
         try {
@@ -60,15 +66,53 @@ class Carrito{
         }
     }
 
-    async getAllProductsByCarritoId(){
+    async crearProductosParaUnCarrito(id, productoParaCarrito){
 
+        
+      // recorremos todos los carritos para encontrar nuetro carrito y agregar el producto y actualizar la informacion
+        this.carritos =  this.carritos.map(carritoMap => {
+
+            if(carritoMap.id === id){
+
+                if(carritoMap.productos){
+                    carritoMap.productos.push(productoParaCarrito)
+                    console.log(carritoMap)
+                    
+                }else{
+                    carritoMap.productos = []
+                    carritoMap.productos.push(productoParaCarrito)
+                }
+            }
+
+            return carritoMap
+        })
+
+        // actualizamos y guardamos nuestro carrito con los productos actualizados
+        try {
+            await fs.promises.writeFile(this.nombreArchivo, JSON.stringify(this.carritos))
+        } catch (error) {
+            console.log(error)
+        }
     }
 
-    async crearProductosParaUnCarrito(id, productoParaCarrito){
-      const [carrito] =   await this.obtenerCarrito(id);
-        this.productos.push(productoParaCarrito);
-        carrito.productos = this.productos
-        console.log(carrito)
+    async eliminarProductoDeUnCarrito(id, id_prod){
+
+        this.carritos =  this.carritos.map(carritoMap => {
+
+            if(carritoMap.id === id){
+
+               carritoMap.productos = carritoMap.productos.filter(producto => producto.id !== id_prod)
+            }
+
+            return carritoMap
+        })
+
+        try {
+            await fs.promises.writeFile(this.nombreArchivo, JSON.stringify(this.carritos))
+        } catch (error) {
+            console.log(error)
+        }
+
     }
 }
 

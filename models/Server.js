@@ -1,5 +1,6 @@
 const express = require("express");
-const cors = require("cors")
+const cors = require("cors");
+const { request, response } = require("express");
 
 
 class Server{
@@ -14,6 +15,14 @@ class Server{
          this.middlewares()
 
          this.routes()
+
+         this.app.get("*", function(req = request,res = response){
+            
+            res.json({
+                error: -2,
+                descripcion: "ruta no implementada"
+            })
+        })
     }
 
     middlewares(){
@@ -36,6 +45,8 @@ class Server{
 
         this.app.use(this.productosPath, require('../routes/productos'));
         this.app.use(this.carritoPath, require('../routes/carrito'));
+
+        
     
     }
 

@@ -3,23 +3,9 @@ const {verificarAdministrador} = require("../helpers/verificarAdministrador");
 const Producto = require("../models/Producto");
 const path = "./db/productos.json"
 
-
-
 const producto = new Producto(path, [] );
 
 const router = Router();
-
-
-// router.get("/", async(req,res)=>{
-
-//     const productos = await contenedor.getAll()
-
-//     res.status(200).json({
-//         msg: "ok get productos",
-//         productos
-//     })
-    
-// })
 
 router.get("/:id", async(req,res)=>{
 

@@ -8,14 +8,16 @@ const carrito =  new Carrito(pathCarrito)
 const producto = new Producto(path)
 const router = Router();
 
+// crear carrito
 router.post("/",async(req = request,res )=>{
 
     try {
         
-        carrito.crearCarrito()
+       const carritoId = await carrito.crearCarrito()
 
         res.status(200).json({
-            msg: "carrito creado correctamente"
+            msg: "carrito creado correctamente",
+            carritoId
         })
 
     } catch (error) {
@@ -28,6 +30,7 @@ router.post("/",async(req = request,res )=>{
     
 })
 
+// vaciar un carrito y eliminarlo
 router.delete("/:id", async(req = request,res )=>{
 
     const {id} = req.params
@@ -59,7 +62,6 @@ router.delete("/:id", async(req = request,res )=>{
     
 })
 
-
 router.post("/:id/productos/:id_prod",async(req = request,res )=>{
 
     let {id, id_prod} = req.params
@@ -86,6 +88,45 @@ router.post("/:id/productos/:id_prod",async(req = request,res )=>{
     }
     
 })
+
+router.get("/:id/productos", async (req= request,res)=>{
+    
+    let {id} = req.params;
+    id = Number(id)
+
+    const productos =  await carrito.obtenerProductosDeCarrito(id);
+
+    res.status(200).json({
+         productos
+    })
+})
+
+router.delete("/:id/productos/:id_prod",async(req = request,res )=>{
+
+    let {id, id_prod} = req.params
+    
+    id = Number(id)
+    id_prod = Number(id_prod)
+
+    await carrito.eliminarProductoDeUnCarrito(id, id_prod)
+
+    try {
+        
+        res.status(200).json({
+            msg: "productos eliminados",
+        })
+
+    } catch (error) {
+
+        console.log(error)
+        res.json({
+            msg: error
+        })
+    }
+    
+})
+
+
 
 
 
