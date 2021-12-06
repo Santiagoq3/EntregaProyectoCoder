@@ -41,6 +41,7 @@ router.post("/",[
     const data = {
         title,
         precio,
+        timestamp: Date.now(),
         thumbnail,
     }
     await producto.save(data)

@@ -15,6 +15,7 @@ class Carrito{
     async crearCarrito(carrito = {}) {
 
         carrito.id = this.carritos.length + 1
+        carrito.timestamp = Date.now()
         this.carritos.push(carrito)
         try {
 
