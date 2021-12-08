@@ -3,6 +3,7 @@ const fs = require("fs")
 class Carrito{
 
     constructor(nombreArchivo){
+
         this.nombreArchivo = nombreArchivo
         this.carritos = JSON.parse(fs.readFileSync(this.nombreArchivo, "utf-8"))
 
@@ -69,13 +70,13 @@ class Carrito{
 
     async crearProductosParaUnCarrito(id, productoParaCarrito){
 
-        
       // recorremos todos los carritos para encontrar nuetro carrito y agregar el producto y actualizar la informacion
         this.carritos =  this.carritos.map(carritoMap => {
 
             if(carritoMap.id === id){
 
                 if(carritoMap.productos){
+
                     carritoMap.productos.push(productoParaCarrito)
                     console.log(carritoMap)
                     
@@ -87,7 +88,7 @@ class Carrito{
 
             return carritoMap
         })
-
+        
         // actualizamos y guardamos nuestro carrito con los productos actualizados
         try {
             await fs.promises.writeFile(this.nombreArchivo, JSON.stringify(this.carritos))

@@ -126,8 +126,4 @@ router.delete("/:id/productos/:id_prod",async(req = request,res )=>{
     
 })
 
-
-
-
-
 module.exports = router

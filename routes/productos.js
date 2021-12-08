@@ -75,10 +75,24 @@ router.put("/:id",[
     let id = req.params.id
     id = Number(id)
 
+    let title = req.body.title
+    let precio = req.body.precio
+    let thumbnail = req.body.thumbnail
+    let stock = req.body.stock
+    let descripcion = req.body.descripcion
+    let codigo = req.body.codigo
+
+    
     const {...resto} = req.body
+
+    if(!title || !precio || !stock || !codigo || !descripcion){
+        return res.status(400).json({
+            msg: "el titulo, precio, stock, descripcion y codigo son obligatorios"
+        })
+    }
+
     
     await producto.actualizar(id,resto)
-
 
     res.status(200).json({
         msg: "actualizado correctamente",

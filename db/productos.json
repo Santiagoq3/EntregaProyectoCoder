@@ -1,1 +1,10 @@
-[{"title":"banana","precio":"500","timestamp":1638997061998,"thumbnail":null,"stock":"disponible","descripcion":"muy rica, pero cara","codigo":"#A1","id":1}]
+[
+    {
+        "title": "peras",
+        "precio": "1000",
+        "descripcion": "recomendable",
+        "stock": "no disponible",
+        "codigo": "b13",
+        "id": 1
+    }
+]

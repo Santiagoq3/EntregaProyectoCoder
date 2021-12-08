@@ -3,6 +3,7 @@ const cors = require("cors");
 const { request, response } = require("express");
 
 class Server{
+    
     constructor(){
 
          this.app  = express();
