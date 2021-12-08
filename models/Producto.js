@@ -29,12 +29,15 @@ class Producto {
 
         const data = await fs.promises.readFile(this.nombreArchivo, "utf-8");
         this.productos = JSON.parse(data);
+        
+        const [{title,precio}] = resto
 
         this.productos =  this.productos.map(producto => {
-
             if( producto.id === id){
+                
                producto = {
-                   ...resto,
+                   title,
+                   precio,
                    id
                }
             }
@@ -42,7 +45,6 @@ class Producto {
             return producto
          })
 
-         console.log(this.productos)
 
         try {
 

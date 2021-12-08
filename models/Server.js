@@ -2,11 +2,12 @@ const express = require("express");
 const cors = require("cors");
 const { request, response } = require("express");
 
-
 class Server{
     constructor(){
+
          this.app  = express();
          this.PORT = process.env.PORT;
+         
          this.adminROL = true
 
          this.productosPath= "/api/productos"
@@ -16,13 +17,42 @@ class Server{
 
          this.routes()
 
-         this.app.get("*", function(req = request,res = response){
+         this.rutasNoImplementadas()
+
+         
+    }
+
+    rutasNoImplementadas(){
+
+        this.app.get("*", function(req = request,res = response){
             
             res.json({
                 error: -2,
-                descripcion: "ruta no implementada"
+                descripcion: "ruta no implementada - metodo : get"
             })
         })
+        this.app.post("*", function(req = request,res = response){
+            
+            res.json({
+                error: -2,
+                descripcion: "ruta no implementada -- metodo : post"
+            })
+        })
+        this.app.put("*", function(req = request,res = response){
+            
+            res.json({
+                error: -2,
+                descripcion: "ruta no implementada - metodo : put"
+            })
+        })
+        this.app.delete("*", function(req = request,res = response){
+            
+            res.json({
+                error: -2,
+                descripcion: "ruta no implementada - metodo : delete"
+            })
+        })
+     
     }
 
     middlewares(){
@@ -46,8 +76,6 @@ class Server{
         this.app.use(this.productosPath, require('../routes/productos'));
         this.app.use(this.carritoPath, require('../routes/carrito'));
 
-        
-    
     }
 
     listen(){

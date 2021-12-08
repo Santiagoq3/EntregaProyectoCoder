@@ -1,4 +1,4 @@
-const {Router, request} = require("express");
+const {Router, request, response} = require("express");
 const {verificarAdministrador} = require("../helpers/verificarAdministrador");
 const Producto = require("../models/Producto");
 const path = "./db/productos.json"
@@ -30,11 +30,20 @@ router.post("/",[
 
     verificarAdministrador
 
-],async(req = request,res)=>{
+],async(req = request,res = response)=>{
 
     let title = req.body.title
     let precio = req.body.precio
     let thumbnail = req.body.thumbnail
+    let stock = req.body.stock
+    let descripcion = req.body.descripcion
+    let codigo = req.body.codigo
+
+    if(!title || !precio || !stock || !codigo){
+        return res.status(400).json({
+            msg: "el titulo, precio, stock y codigo son obligatorios"
+        })
+    }
 
     console.log(title)
 
@@ -43,6 +52,9 @@ router.post("/",[
         precio,
         timestamp: Date.now(),
         thumbnail,
+        stock,
+        descripcion,
+        codigo
     }
     await producto.save(data)
 

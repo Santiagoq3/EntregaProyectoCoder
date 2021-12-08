@@ -75,7 +75,7 @@ router.post("/:id/productos/:id_prod",async(req = request,res )=>{
        const carritoPost = await carrito.crearProductosParaUnCarrito(id, productoParaCarrito)
 
         res.status(200).json({
-            msg: "carrito obtenido",
+            msg: "Producto agregado al carrito",
             carritoPost
         })
 
@@ -113,7 +113,7 @@ router.delete("/:id/productos/:id_prod",async(req = request,res )=>{
     try {
         
         res.status(200).json({
-            msg: "productos eliminados",
+            msg: "producto eliminado",
         })
 
     } catch (error) {
