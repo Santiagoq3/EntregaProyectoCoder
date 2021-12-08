@@ -58,7 +58,6 @@ router.post("/",[
     }
     await producto.save(data)
 
-
     res.status(200).json({
         msg: "Creado y guardado correctamente",
         
@@ -91,7 +90,6 @@ router.put("/:id",[
         })
     }
 
-    
     await producto.actualizar(id,resto)
 
     res.status(200).json({
