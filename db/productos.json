@@ -1,3 +1,22 @@
 [
-   
+    {
+        "title": "banana",
+        "precio": "500",
+        "timestamp": 1639332918333,
+        "thumbnail": null,
+        "stock": "disponible",
+        "descripcion": "muy rica, pero cara",
+        "codigo": "#A1",
+        "id": 1
+    },
+    {
+        "title": "manzanas",
+        "precio": "500",
+        "timestamp": 1639332940764,
+        "thumbnail": null,
+        "stock": "disponible",
+        "descripcion": "muy rica, pero cara",
+        "codigo": "#A1",
+        "id": 2
+    }
 ]

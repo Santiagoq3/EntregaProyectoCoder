@@ -69,11 +69,38 @@ router.post("/:id/productos/:id_prod",async(req = request,res )=>{
     id = Number(id)
     id_prod = Number(id_prod)
 
+    // ----- Validando que el producto exista ----
+
+    const productosExistentes  = await producto.getAll()
+    const idsExistentes = productosExistentes.map(productosIds => productosIds.id);
+
+    if(!idsExistentes.includes(id_prod)){
+        return res.status(400).json({
+            msg: "el producto no existe"
+        })
+    }
+     // -----    ----
+    // validanddo existencia del producto en el carrito
+     const productoDeCarrito = await carrito.obtenerProductosDeCarrito(id);
+     const productosExistentesEnCarrito = productoDeCarrito.map(productosIds => productosIds.id);
+
+     if(productosExistentesEnCarrito.includes(id_prod)){
+
+         return res.status(400).json({
+             msg: "el producto ya existe en el carrito"
+         })
+     }
+
     let [productoParaCarrito]  = await producto.getById(id_prod)
     try {
         
        const carritoPost = await carrito.crearProductosParaUnCarrito(id, productoParaCarrito)
 
+       if(carritoPost){
+           return res.json({
+               msg: "el producto en el carrito ya existe"
+           })
+       }
         res.status(200).json({
             msg: "Producto agregado al carrito",
             carritoPost

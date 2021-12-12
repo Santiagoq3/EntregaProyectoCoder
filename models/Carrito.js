@@ -71,14 +71,16 @@ class Carrito{
     async crearProductosParaUnCarrito(id, productoParaCarrito){
 
       // recorremos todos los carritos para encontrar nuetro carrito y agregar el producto y actualizar la informacion
+        let productoCarritoExiste;
         this.carritos =  this.carritos.map(carritoMap => {
 
             if(carritoMap.id === id){
-
+                
+                
+        
                 if(carritoMap.productos){
 
                     carritoMap.productos.push(productoParaCarrito)
-                    console.log(carritoMap)
                     
                 }else{
                     carritoMap.productos = []
@@ -95,6 +97,9 @@ class Carrito{
         } catch (error) {
             console.log(error)
         }
+
+        return productoCarritoExiste
+
     }
 
     async eliminarProductoDeUnCarrito(id, id_prod){

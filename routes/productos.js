@@ -7,6 +7,24 @@ const producto = new Producto(path, [] );
 
 const router = Router();
 
+router.get("/", async(req,res)=>{
+
+  
+    
+   const productos = await producto.getAll()
+
+     if(productos.length === 0){
+         return res.status(400).json({
+             error: "no hay productos existentes"
+         })
+     }
+
+    res.status(200).json({
+        
+        productos
+    })
+})
+
 router.get("/:id", async(req,res)=>{
 
     let id = req.params.id
