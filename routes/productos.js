@@ -1,7 +1,9 @@
 const {Router, request, response} = require("express");
+const { Productos } = require("../daos/generarDaos");
 const {verificarAdministrador} = require("../helpers/verificarAdministrador");
 const Producto = require("../models/Producto");
-const path = "./db/productos.json"
+const path = "./db/productos.json";
+
 
 const producto = new Producto(path, [] );
 
@@ -9,9 +11,8 @@ const router = Router();
 
 router.get("/", async(req,res)=>{
 
-  
-    
-   const productos = await producto.getAll()
+
+   const productos = await Productos.getAll()
 
      if(productos.length === 0){
          return res.status(400).json({
@@ -27,12 +28,9 @@ router.get("/", async(req,res)=>{
 
 router.get("/:id", async(req,res)=>{
 
-    let id = req.params.id
-    id = Number(id)
-    
-   const productos = await producto.getById(id)
-
-     if(productos.length === 0){
+    const id = req.params.id
+   const productos = await Productos.getByID(id)
+     if(!productos){
          return res.status(400).json({
              error: "no se encontro el producto"
          })
@@ -63,18 +61,31 @@ router.post("/",[
         })
     }
 
-    console.log(title)
+    // validar que el codigo ya existe
+    const producto = await Productos.findOne({codigo})
+    if(producto){
+        return res.status(400).json({
+            msg: `ya existe un producto con el codigo ${codigo}`
+        })
+    }
+
 
     const data = {
         title,
         precio,
-        timestamp: Date.now(),
         thumbnail,
         stock,
         descripcion,
         codigo
     }
-    await producto.save(data)
+
+    try {
+
+        await Productos.insert(data)
+
+    } catch (error) {
+        console.log(error)
+    }
 
     res.status(200).json({
         msg: "Creado y guardado correctamente",
@@ -90,26 +101,25 @@ router.put("/:id",[
 ] , async(req,res)=>{
 
     let id = req.params.id
-    id = Number(id)
 
-    let title = req.body.title
-    let precio = req.body.precio
-    let thumbnail = req.body.thumbnail
-    let stock = req.body.stock
-    let descripcion = req.body.descripcion
-    let codigo = req.body.codigo
 
-    
     const {...resto} = req.body
-
-    if(!title || !precio || !stock || !codigo || !descripcion){
+    const lengthOfObject = Object.keys(resto).length;
+    if(lengthOfObject === 0){
         return res.status(400).json({
-            msg: "el titulo, precio, stock, descripcion y codigo son obligatorios"
+            msg: "error envie algun dato"
         })
     }
 
-    await producto.actualizar(id,resto)
+    // if(!title || !precio || !stock || !codigo || !descripcion){
+    //     return res.status(400).json({
+    //         msg: "el titulo, precio, stock, descripcion y codigo son obligatorios"
+    //     })
+    // }
 
+   
+     await Productos.update(id,resto)
+    
     res.status(200).json({
         msg: "actualizado correctamente",
        
@@ -124,12 +134,13 @@ router.delete("/:id",[
 ], async(req,res)=>{
 
     let id = req.params.id
-    id = Number(id)
+    // id = Number(id)
 
-     await producto.deleteById(id)
+    const producto =  await Productos.delete(id)
 
     res.status(200).json({
-        msg: " producto eliminado correctamente"
+        msg: " producto eliminado correctamente",
+        producto
     })
     
 })

@@ -1,4 +1,6 @@
 const express = require("express");
+const mongoose = require('mongoose')
+const { mongodbConfig } = require('../db/dbConfig')
 const cors = require("cors");
 const { request, response } = require("express");
 
@@ -8,11 +10,14 @@ class Server{
 
          this.app  = express();
          this.PORT = process.env.PORT;
+
          
          this.adminROL = true
 
          this.productosPath= "/api/productos"
          this.carritoPath= "/api/carrito"
+
+         this.conectarBaseDeDatos()
 
          this.middlewares()
 
@@ -70,6 +75,27 @@ class Server{
             next()
         })
 
+    }
+
+    async conectarBaseDeDatos(){
+
+        switch (process.env.DATABASE) {
+            case "mongodb":
+                  try {
+                    await mongoose.connect(mongodbConfig.connection,mongodbConfig.options)
+                    console.log("Base de datos conectada a mongodb");
+                  }catch (error) {
+                    console.log(error);
+                    throw new Error('error en la base de datos')
+                  }
+                break;
+        
+            default:
+                console.log("conectadao a otra base de datos");
+        }
+        
+ 
+        
     }
 
     routes(){

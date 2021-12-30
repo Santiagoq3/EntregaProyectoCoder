@@ -8,12 +8,36 @@ const carrito =  new Carrito(pathCarrito)
 const producto = new Producto(path)
 const router = Router();
 
+const { Productos, Carritos } = require("../daos/generarDaos");
+
+
+router.get("/:id", async (req,res)=>{
+    
+
+    // id = Number(id)
+    const id = req.params.id;
+
+    const carrito =  await Carritos.getByIDPopulateCart(id);
+
+    if(!carrito){
+        return res.status(400).json({
+            error: "no se encontro el carrito"
+        })
+    }
+
+    res.status(200).json({
+         carrito
+    })
+})
+
 // crear carrito
 router.post("/",async(req = request,res )=>{
 
     try {
         
-       const carritoId = await carrito.crearCarrito()
+    //    const carritoId = await carrito.crearCarrito()
+        // CODIGO NUEVO
+        const carritoId = await Carritos.insert()
 
         res.status(200).json({
             msg: "carrito creado correctamente",
@@ -35,7 +59,7 @@ router.delete("/:id", async(req = request,res )=>{
 
     const {id} = req.params
 
-    Number(id)
+    // Number(id)
 
     if(!id){
 
@@ -46,7 +70,7 @@ router.delete("/:id", async(req = request,res )=>{
 
     try {
         
-       await carrito.deleteCarritoById(id)
+       await Carritos.delete(id)
 
         res.status(200).json({
             msg: "carrito eliminado correctamente"
@@ -66,41 +90,43 @@ router.post("/:id/productos/:id_prod",async(req = request,res )=>{
 
     let {id, id_prod} = req.params
     
-    id = Number(id)
-    id_prod = Number(id_prod)
+    // id = Number(id)
+    // id_prod = Number(id_prod)
 
     // ----- Validando que el producto exista ----
 
-    const productosExistentes  = await producto.getAll()
-    const idsExistentes = productosExistentes.map(productosIds => productosIds.id);
-
-    if(!idsExistentes.includes(id_prod)){
-        return res.status(400).json({
-            msg: "el producto no existe"
-        })
-    }
+    // const productosExistentes  = await producto.getAll()
+    // const productosExistentes = await Productos.getAll();
+    // const idsExistentes = productosExistentes.map(productosIds => productosIds._id);
+    // if(!idsExistentes.includes(productos)){
+    //     return res.status(400).json({
+    //         msg: "el producto no existe"
+    //     })
+    // }
      // -----    ----
     // validanddo existencia del producto en el carrito
-     const productoDeCarrito = await carrito.obtenerProductosDeCarrito(id);
-     const productosExistentesEnCarrito = productoDeCarrito.map(productosIds => productosIds.id);
+    //  const productoDeCarrito = await carrito.obtenerProductosDeCarrito(id);
+    //  const productosExistentesEnCarrito = productoDeCarrito.map(productosIds => productosIds.id);
 
-     if(productosExistentesEnCarrito.includes(id_prod)){
+    //  if(productosExistentesEnCarrito.includes(id_prod)){
 
-         return res.status(400).json({
-             msg: "el producto ya existe en el carrito"
-         })
-     }
+    //      return res.status(400).json({
+    //          msg: "el producto ya existe en el carrito"
+    //      })
+    //  }
 
-    let [productoParaCarrito]  = await producto.getById(id_prod)
+    // let [productoParaCarrito]  = await producto.getByID(id_prod)
+    //    const carritoPost = await carrito.crearProductosParaUnCarrito(id, productoParaCarrito)
+    // const producto = await Productos.getByID(id_prod)
     try {
         
-       const carritoPost = await carrito.crearProductosParaUnCarrito(id, productoParaCarrito)
+       const carritoPost = await Carritos.insertProductToCart(id,id_prod)
 
-       if(carritoPost){
-           return res.json({
-               msg: "el producto en el carrito ya existe"
-           })
-       }
+    //    if(carritoPost){
+    //        return res.json({
+    //            msg: "el producto en el carrito ya existe"
+    //        })
+    //    }
         res.status(200).json({
             msg: "Producto agregado al carrito",
             carritoPost
@@ -116,15 +142,27 @@ router.post("/:id/productos/:id_prod",async(req = request,res )=>{
     
 })
 
-router.get("/:id/productos", async (req= request,res)=>{
-    
-    let {id} = req.params;
-    id = Number(id)
 
-    const productos =  await carrito.obtenerProductosDeCarrito(id);
+//  obtener productos de carrito
+router.get("/productos/:id_cart", async (req,res)=>{
+    
+
+    // id = Number(id)
+    const id = req.params.id_cart;
+
+    const {productos} =  await Carritos.getByIDPopulateCart(id);
+
+
+    if(!carrito){
+        return res.status(400).json({
+            error: "no se encontro el carrito"
+        })
+    }
+
+   
 
     res.status(200).json({
-         productos
+        productos
     })
 })
 
