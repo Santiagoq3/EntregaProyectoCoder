@@ -87,6 +87,15 @@ class ProductoContenedor{
             console.log(error)
         }
     }
+
+    async deleteProductsFromCart(id_cart,id_prod){
+        try {
+            const carrito  = await this.coleccion.updateOne({"_id":id_cart}, {$pull: {productos: id_prod}})
+           return carrito
+        } catch (error) {
+            console.log(error)
+        }
+    }
 }
 
 

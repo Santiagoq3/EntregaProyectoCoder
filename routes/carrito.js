@@ -142,24 +142,19 @@ router.post("/:id/productos/:id_prod",async(req = request,res )=>{
     
 })
 
-
 //  obtener productos de carrito
 router.get("/productos/:id_cart", async (req,res)=>{
     
-
     // id = Number(id)
     const id = req.params.id_cart;
 
     const {productos} =  await Carritos.getByIDPopulateCart(id);
-
 
     if(!carrito){
         return res.status(400).json({
             error: "no se encontro el carrito"
         })
     }
-
-   
 
     res.status(200).json({
         productos
@@ -170,13 +165,12 @@ router.delete("/:id/productos/:id_prod",async(req = request,res )=>{
 
     let {id, id_prod} = req.params
     
-    id = Number(id)
-    id_prod = Number(id_prod)
-
-    await carrito.eliminarProductoDeUnCarrito(id, id_prod)
+    // id = Number(id)
+    // id_prod = Number(id_prod)
 
     try {
         
+        await Carritos.deleteProductsFromCart(id, id_prod)
         res.status(200).json({
             msg: "producto eliminado",
         })
