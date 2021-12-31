@@ -37,7 +37,10 @@ router.post("/",async(req = request,res )=>{
         
     //    const carritoId = await carrito.crearCarrito()
         // CODIGO NUEVO
-        const carritoId = await Carritos.insert()
+        const carritoId = await Carritos.insert( {
+            timestamp: Date.now(),
+            productos: []
+        })
 
         res.status(200).json({
             msg: "carrito creado correctamente",
@@ -128,7 +131,6 @@ router.post("/:id/productos/:id_prod",async(req = request,res )=>{
     //        })
     //    }
         res.status(200).json({
-            msg: "Producto agregado al carrito",
             carritoPost
         })
 
@@ -170,7 +172,8 @@ router.delete("/:id/productos/:id_prod",async(req = request,res )=>{
 
     try {
         
-        await Carritos.deleteProductsFromCart(id, id_prod)
+        const result = await Carritos.deleteProductsFromCart(id, id_prod);
+        console.log(result)
         res.status(200).json({
             msg: "producto eliminado",
         })

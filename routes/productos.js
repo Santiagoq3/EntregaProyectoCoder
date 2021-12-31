@@ -29,7 +29,9 @@ router.get("/", async(req,res)=>{
 router.get("/:id", async(req,res)=>{
 
     const id = req.params.id
-   const productos = await Productos.getByID(id)
+   const productos = await Productos.getByID(id);
+
+   console.log(productos)
      if(!productos){
          return res.status(400).json({
              error: "no se encontro el producto"
@@ -62,12 +64,13 @@ router.post("/",[
     }
 
     // validar que el codigo ya existe
-    const producto = await Productos.findOne({codigo})
-    if(producto){
-        return res.status(400).json({
-            msg: `ya existe un producto con el codigo ${codigo}`
-        })
-    }
+    // const producto = await Productos.findOne(codigo)
+    // console.log(producto)
+    // if(producto){
+    //     return res.status(400).json({
+    //         msg: `ya existe un producto con el codigo ${codigo}`
+    //     })
+    // }
 
 
     const data = {
@@ -81,17 +84,16 @@ router.post("/",[
 
     try {
 
-        await Productos.insert(data)
-
+       const result =  await Productos.insert(data, codigo)
+        res.status(200).json({
+            msg: "Creado y guardado correctamente",
+            result
+            
+        })
     } catch (error) {
         console.log(error)
     }
 
-    res.status(200).json({
-        msg: "Creado y guardado correctamente",
-        
-    })
-    
 })
 
 router.put("/:id",[
@@ -117,7 +119,6 @@ router.put("/:id",[
     //     })
     // }
 
-   
      await Productos.update(id,resto)
     
     res.status(200).json({

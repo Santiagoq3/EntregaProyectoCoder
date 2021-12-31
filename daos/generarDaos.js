@@ -12,7 +12,14 @@ switch (process.env.DATABASE) {
         Carritos  = new CarritoDao();
         
         break;
+    case  "firebase":
 
+        const FirebaseProductosDao = require("./productos/Firebase.Productos.Dao");
+        const FirebaseCarritosDao = require("./carritos/Firebase.Carritos.Dao");
+
+        Productos = new FirebaseProductosDao();
+        Carritos  = new FirebaseCarritosDao()
+        break;
     default:
         break;
 }

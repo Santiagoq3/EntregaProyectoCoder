@@ -1,8 +1,12 @@
 const express = require("express");
 const mongoose = require('mongoose')
-const { mongodbConfig } = require('../db/dbConfig')
+const admin = require("firebase-admin");
+
+const { mongodbConfig, firebaseConfig } = require('../db/dbConfig')
 const cors = require("cors");
 const { request, response } = require("express");
+
+const  serviceAccount = firebaseConfig;
 
 class Server{
     
@@ -88,6 +92,21 @@ class Server{
                     console.log(error);
                     throw new Error('error en la base de datos')
                   }
+                break;
+            case "firebase":
+                  try {
+                    
+                    admin.initializeApp(
+                        {
+                        credential:admin.credential.cert(serviceAccount),
+                        databaseURL:"https://ecommerce-coderhouse-6fc6b.firebaseio.com"
+                    })
+                    console.log("conectado a la base de datos firebase")
+
+                  } catch (error) {
+                      console.log(error)
+                  }
+                  
                 break;
         
             default:
