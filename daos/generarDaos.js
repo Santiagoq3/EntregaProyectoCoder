@@ -1,4 +1,5 @@
 
+
 let Productos;
 let Carritos
 
@@ -18,8 +19,16 @@ switch (process.env.DATABASE) {
         const FirebaseCarritosDao = require("./carritos/Firebase.Carritos.Dao");
 
         Productos = new FirebaseProductosDao();
-        Carritos  = new FirebaseCarritosDao()
+        Carritos  = new FirebaseCarritosDao();
         break;
+    case "archivo":
+
+        const ArchivoProductoDao = require("./productos/Archivo.Producto.Dao");
+        const ArchivoCarritoDao = require("./carritos/Archivo.Carrito.Dao");
+
+        Productos = new ArchivoProductoDao();
+        Carritos= new ArchivoCarritoDao();
+        break
     default:
         break;
 }
