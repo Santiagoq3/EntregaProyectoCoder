@@ -77,7 +77,6 @@ class Carrito{
             if(carritoMap.id === id){
                 
                 
-        
                 if(carritoMap.productos){
 
                     carritoMap.productos.push(productoParaCarrito)
@@ -104,21 +103,7 @@ class Carrito{
 
     async eliminarProductoDeUnCarrito(id, id_prod){
 
-        this.carritos =  this.carritos.map(carritoMap => {
-
-            if(carritoMap.id === id){
-
-               carritoMap.productos = carritoMap.productos.filter(producto => producto.id !== id_prod)
-            }
-
-            return carritoMap
-        })
-
-        try {
-            await fs.promises.writeFile(this.nombreArchivo, JSON.stringify(this.carritos))
-        } catch (error) {
-            console.log(error)
-        }
+       
 
     }
 }

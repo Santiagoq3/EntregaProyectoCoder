@@ -103,9 +103,16 @@ router.put("/:id",[
 ] , async(req,res)=>{
 
     let id = req.params.id
+    let title = req.body.title
+    let precio = req.body.precio
+    let thumbnail = req.body.thumbnail
+    let stock = req.body.stock
+    let descripcion = req.body.descripcion
+    let codigo = req.body.codigo
 
 
-    const {...resto} = req.body
+    const {...resto} = req.body;
+    console.log(resto)
     const lengthOfObject = Object.keys(resto).length;
     if(lengthOfObject === 0){
         return res.status(400).json({
@@ -113,11 +120,11 @@ router.put("/:id",[
         })
     }
 
-    // if(!title || !precio || !stock || !codigo || !descripcion){
-    //     return res.status(400).json({
-    //         msg: "el titulo, precio, stock, descripcion y codigo son obligatorios"
-    //     })
-    // }
+    if(!title || !precio || !stock || !codigo || !descripcion){
+        return res.status(400).json({
+            msg: "el titulo, precio, stock, descripcion y codigo son obligatorios"
+        })
+    }
 
      await Productos.update(id,resto)
     

@@ -3,7 +3,7 @@ const ArchivoContenedor = require("../../contenedores/Archivo.Contenedor")
 
 class ArchivoCarritoDao extends ArchivoContenedor{
     constructor(){
-        super()
+        super("carritos.json")
     }
 }
 

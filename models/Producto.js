@@ -96,7 +96,7 @@ class Producto {
 
         } catch (error) {
 
-            console.log("no se pudo guardar", error)
+            console.log("no se pudo eliminar", error)
         }
     }
 

@@ -150,7 +150,7 @@ router.get("/productos/:id_cart", async (req,res)=>{
     // id = Number(id)
     const id = req.params.id_cart;
 
-    const {productos} =  await Carritos.getByIDPopulateCart(id);
+    const productos =  await Carritos.getByIDPopulateCart(id);
 
     if(!carrito){
         return res.status(400).json({
