@@ -15,7 +15,6 @@ class Server{
          this.app  = express();
          this.PORT = process.env.PORT;
 
-         
          this.adminROL = true
 
          this.productosPath= "/api/productos"
@@ -110,7 +109,7 @@ class Server{
                 break;
         
             default:
-                console.log("conectadao a otra base de datos");
+                console.log("conectado a otra base de datos");
         }
         
  

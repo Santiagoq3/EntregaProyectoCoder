@@ -36,6 +36,8 @@ class ProductoContenedor{
 
     async getAll(){
         try {
+
+            
             const productos = await this.coleccion.find()
             return productos;
         } catch (error) {
@@ -45,7 +47,24 @@ class ProductoContenedor{
 
     async insert(data){
         try {
+            const {codigo} = data;
+            if(codigo){
+                
+                const producto = await this.coleccion.findOne({codigo})
+                if(producto){
+                    return {
+                        msg: "el producto con ese codigo ya existe"
+                    }
+                }
+
+            }else{
+            }
+            
             await this.coleccion.create(data)
+
+            return {
+                msg: "creado correctamente"
+            }
         } catch (error) {
             console.log(error)
         }

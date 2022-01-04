@@ -1,16 +1,11 @@
 const {Router, request, response} = require("express");
 const { Productos } = require("../daos/generarDaos");
 const {verificarAdministrador} = require("../helpers/verificarAdministrador");
-const Producto = require("../models/Producto");
-const path = "./db/productos.json";
 
-
-const producto = new Producto(path, [] );
 
 const router = Router();
 
 router.get("/", async(req,res)=>{
-
 
    const productos = await Productos.getAll()
 
@@ -31,7 +26,6 @@ router.get("/:id", async(req,res)=>{
     const id = req.params.id
    const productos = await Productos.getByID(id);
 
-   console.log(productos)
      if(!productos){
          return res.status(400).json({
              error: "no se encontro el producto"
@@ -63,15 +57,6 @@ router.post("/",[
         })
     }
 
-    // validar que el codigo ya existe
-    // const producto = await Productos.findOne(codigo)
-    // console.log(producto)
-    // if(producto){
-    //     return res.status(400).json({
-    //         msg: `ya existe un producto con el codigo ${codigo}`
-    //     })
-    // }
-
 
     const data = {
         title,
@@ -86,7 +71,7 @@ router.post("/",[
 
        const result =  await Productos.insert(data, codigo)
         res.status(200).json({
-            msg: "Creado y guardado correctamente",
+           
             result
             
         })
@@ -110,9 +95,7 @@ router.put("/:id",[
     let descripcion = req.body.descripcion
     let codigo = req.body.codigo
 
-
     const {...resto} = req.body;
-    console.log(resto)
     const lengthOfObject = Object.keys(resto).length;
     if(lengthOfObject === 0){
         return res.status(400).json({
@@ -142,8 +125,7 @@ router.delete("/:id",[
 ], async(req,res)=>{
 
     let id = req.params.id
-    // id = Number(id)
-
+    
     const producto =  await Productos.delete(id)
 
     res.status(200).json({

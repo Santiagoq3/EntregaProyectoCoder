@@ -94,7 +94,6 @@ class ContenedorFirebase {
             producto.id = id_prod
             const doc = await this.coleccion.doc(id).get();
             const {productos} = doc.data();
-            console.log(productos)
 
             const idsExistentes = productos.map(productosIds => productosIds.id);
             if(idsExistentes.includes(id_prod)){
