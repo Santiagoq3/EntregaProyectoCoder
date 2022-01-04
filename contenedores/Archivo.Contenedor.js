@@ -1,6 +1,5 @@
 const fs = require("fs")
 
-
 class ArchivoContenedor {
 
     constructor(nombreArchivo) {
